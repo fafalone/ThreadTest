@@ -1,0 +1,42 @@
+[ Description ("") ]
+[ FormDesignerId ("0CC17749-9FB4-4EE0-8144-99695AA9166A") ]
+[ PredeclaredId ]
+Class Form1
+    Private Declare Function GetCurrentThreadId Lib "kernel32" () As Long
+
+    Private Declare Function CreateThread Lib "kernel32" ( _
+                            ByRef lpThreadAttributes As Any, _
+                            ByVal dwStackSize As Long, _
+                            ByVal lpStartAddress As LongPtr, _
+                            ByRef lpParameter As Any, _
+                            ByVal dwCreationFlags As Long, _
+                            ByRef lpThreadId As Long) As LongPtr
+
+    Private Declare Function WaitForSingleObject Lib "kernel32" ( _
+                            ByVal hHandle As LongPtr, _
+                            ByVal dwMilliseconds As Long) As Long
+
+    Private Const INFINITE = -1&
+    Sub New()
+    End Sub
+    
+    Private Sub Command1_Click() Handles Command1.Click
+        Dim lTID As Long
+        Dim lCurTID As Long
+        Dim hThreadNew As LongPtr
+        lCurTID = GetCurrentThreadId()
+        hThreadNew = CreateThread(ByVal 0&, 0&, AddressOf TestThread, ByVal 0&, 0&, lTID)
+        Label1.Caption = "Thread " & lCurTID & " is waiting on thread " & lTID
+        Dim hr As Long
+        hr = WaitForSingleObject(hThreadNew, 30000&)
+        Label1.Caption = "Wait end code " & CStr(hr)
+    End Sub
+    Private Sub TestThread()
+        MsgBox "Hello thread"
+
+        'Label1.Caption = "test"
+
+    End Sub
+    
+
+End Class
