@@ -28,11 +28,12 @@ Class Form1
         hThreadNew = CreateThread(ByVal 0, 0, AddressOf TestThread, ByVal 0, 0, lTID)
         Label1.Caption = "Thread " & lCurTID & " is waiting on thread " & lTID
         Dim hr As Long
-        hr = WaitForSingleObject(hThreadNew, 30000&)
+        hr = WaitForSingleObject(hThreadNew, 30000&) 'Wait 30s as a default. You can use INFINITE instead if you never want to time out.
         Label1.Caption = "Wait end code " & CStr(hr)
     End Sub
 
     Public Sub TestThread()
         MsgBox "Hello thread"
     End Sub
+    
 End Class
